@@ -1,0 +1,311 @@
+/* Reset y Variables */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family:
+    "Segoe UI",
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+:root {
+  --primary-color: #4f46e5;
+  --primary-hover: #4338ca;
+  --text-dark: #1f2937;
+  --text-light: #6b7280;
+  --bg-light: #f9fafb;
+  --border-color: #d1d5db;
+  --valid-bg: #e8f5e9; /* Verde claro tenue */
+  --valid-border: #10b981;
+  --invalid-border: #ef4444;
+}
+
+body {
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+}
+
+/* Layout Principal con CSS Grid */
+.layout-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
+
+/* Contenedores - diseño compacto sin scroll */
+.form-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background-color: #ffffff;
+  overflow-y: auto;
+}
+
+.form-wrapper {
+  width: 100%;
+  max-width: 380px;
+  margin: auto;
+}
+
+.image-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+}
+
+.login-bg {
+  background-image: url("../img/login.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Tipografía y Formularios - tamaños reducidos */
+h2 {
+  font-size: 1.75rem;
+  margin-bottom: 0.25rem;
+  color: var(--text-dark);
+}
+.form-wrapper > p {
+  color: var(--text-light);
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--text-dark);
+}
+
+input {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  background-color: #fff;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* Estados de validación */
+.input-group input.valid {
+  border-color: var(--valid-border);
+  background-color: var(--valid-bg);
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.1);
+}
+
+.input-group input.invalid {
+  border-color: var(--invalid-border);
+  background-color: #fff;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1);
+}
+
+/* Sobrescribir autofill del navegador con el verde de validación */
+.input-group input.valid:-webkit-autofill,
+.input-group input.valid:-webkit-autofill:hover,
+.input-group input.valid:-webkit-autofill:focus,
+.input-group input.valid:-webkit-autofill:active,
+#loginForm input:-webkit-autofill,
+#loginForm input:-webkit-autofill:hover,
+#loginForm input:-webkit-autofill:focus,
+#loginForm input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px var(--valid-bg) inset !important;
+  box-shadow: 0 0 0 30px var(--valid-bg) inset !important;
+  background-color: var(--valid-bg) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.error-message {
+  font-size: 0.7rem;
+  color: var(--invalid-border);
+  margin-top: 0.2rem;
+  min-height: 1rem;
+  display: block;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 0.6rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+}
+.btn-primary:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.auth-links {
+  margin-top: 1.25rem;
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+.auth-links a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.auth-links a:hover {
+  text-decoration: underline;
+}
+
+/* Mensajes de Error/Éxito (legado) */
+.msg {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  text-align: center;
+}
+.error-msg {
+  color: #dc2626;
+}
+.success-msg {
+  color: #059669;
+}
+
+/* Capa oscura sobre la imagen */
+.image-container.login-bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+/* Video de fondo en registro */
+.image-container {
+  position: relative;
+  overflow: hidden;
+}
+.video-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* Toasts */
+.toast-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1050;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 300px;
+}
+
+.toast {
+  background: white;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  animation: slideIn 0.3s ease forwards;
+  border-left: 4px solid;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.toast-success {
+  border-left-color: var(--valid-border);
+  background-color: #ecfdf5;
+  color: #065f46;
+}
+
+.toast-error {
+  border-left-color: var(--invalid-border);
+  background-color: #fef2f2;
+  color: #991b1b;
+}
+
+.toast.fade-out {
+  animation: fadeOut 0.5s ease forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .layout-grid {
+    grid-template-columns: 1fr;
+  }
+  .image-container {
+    display: none;
+  }
+  .form-container {
+    padding: 1rem;
+  }
+  .form-wrapper {
+    max-width: 100%;
+  }
+  .toast-container {
+    top: 0.5rem;
+    right: 0.5rem;
+    left: 0.5rem;
+    max-width: none;
+  }
+}
