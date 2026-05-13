@@ -1,4 +1,4 @@
-# 🚪 Gestion-Control-de-Accesso
+# 🚪 Gestion-Control-de-Acceso
 
 Sistema integral de control de acceso para torres corporativas, desarrollado con Node.js, Express, MongoDB y un frontend moderno e intuitivo.
 
@@ -310,6 +310,12 @@ Usa nombres de variables descriptivos
 Comenta funciones complejas
 
 Sigue el patrón MVC existente
+
+## 🌐 Aplicación en vivo
+
+La aplicación está desplegada y funcionando en Render:
+
+🔗 [https://gestion-control-de-acceso.onrender.com]
 
 📄 Licencia
 Distribuido bajo la licencia MIT. Consulta el archivo LICENSE para más información.
