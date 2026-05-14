@@ -522,7 +522,7 @@ const renderVisitorForm = async () => {
         method: "POST",
         body: JSON.stringify(visitData),
       });
-      showToast("Usuario registrado exitosamente", "success");
+      showToast("Visitante registrado exitosamente", "success");
       setTimeout(() => changeView("main", renderMainView, -1), 1500);
     } catch (error) {
       showToast(error.message, "error");
