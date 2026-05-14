@@ -1449,3 +1449,57 @@ body {
 .btn-delete-modal:hover {
   background-color: #b91c1c;
 }
+/* ========== MEJORAS RESPONSIVE PARA TABLAS (MÓVILES) ========== */
+@media (max-width: 768px) {
+  .visitors-table-wrapper,
+  .data-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .visitors-table,
+  .recurrent-table,
+  .data-table {
+    min-width: 600px;
+    font-size: 0.7rem;
+  }
+
+  .visitors-table th,
+  .visitors-table td,
+  .recurrent-table th,
+  .recurrent-table td,
+  .data-table th,
+  .data-table td {
+    padding: 0.4rem 0.3rem;
+    white-space: nowrap;
+  }
+
+  .report-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: flex-end;
+  }
+
+  .btn-print,
+  .btn-danger#closeGuardBtn,
+  .btn-back {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .report-meta {
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.7rem;
+  }
+
+  .visitors-table,
+  .recurrent-table,
+  .data-table {
+    min-width: 500px;
+    font-size: 0.65rem;
+  }
+}

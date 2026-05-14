@@ -218,17 +218,11 @@ const archiveUserVisits = async () => {
 };
 
 // ==================== MODAL DE CONFIRMACIÓN DE ELIMINACIÓN ====================
-/**
- * Muestra una tarjeta modal de confirmación para acciones destructivas.
- * @param {string} message - Mensaje de advertencia (ej: "¿Está seguro de eliminar esta compañía?")
- * @returns {Promise<boolean>} - Se resuelve a true si el usuario confirma, false en caso contrario.
- */
 const showDeleteConfirmation = (message) => {
   return new Promise((resolve) => {
     const modal = document.getElementById("modalContainer");
     if (!modal) return resolve(false);
 
-    // Construir la tarjeta de confirmación
     modal.innerHTML = `
       <div class="modal-delete-card" style="background: var(--card-bg); border-radius: 1rem; box-shadow: var(--shadow-md); padding: 1.5rem; max-width: 400px; width: 90%; text-align: center;">
         <div style="font-size: 2.5rem; color: var(--danger); margin-bottom: 0.5rem;">
@@ -250,7 +244,6 @@ const showDeleteConfirmation = (message) => {
     const closeModal = (result) => {
       modal.classList.remove("active");
       modal.innerHTML = "";
-      // Si la vista actual es el directorio, renderizarlo de nuevo para restaurar el DOM
       if (currentActiveView === "directorio") {
         renderDirectoryView();
       }
@@ -258,17 +251,14 @@ const showDeleteConfirmation = (message) => {
     };
 
     cancelBtn.addEventListener("click", () => closeModal(false));
-
     confirmBtn.addEventListener("click", () => closeModal(true));
 
-    // Cerrar al hacer clic fuera de la tarjeta (backdrop)
     modal.addEventListener("click", (e) => {
       if (e.target === modal) {
         closeModal(false);
       }
     });
 
-    // Cerrar con tecla Escape
     const handleEsc = (e) => {
       if (e.key === "Escape") {
         closeModal(false);
@@ -399,7 +389,6 @@ const renderVisitorForm = async () => {
     .map((name) => `<option value="${name.replace(/"/g, "&quot;")}">`)
     .join("");
 
-  // Generar opciones para el <select> de Empresa a Visitar
   const companyOptions = towerCompanies
     .map(
       (company) =>
@@ -584,7 +573,7 @@ const renderVisitorStatus = async () => {
         <div class="visitors-table-wrapper">
            <div class="search-container"><div class="ibm-search"><i class="fas fa-search search-icon"></i><input type="text" class="search-input" id="tableSearchInput" placeholder="Buscar por Carnet, Nombre, Cédula o Empresa..."></div></div>
           <table class="visitors-table"><thead><tr><th>Carnet</th><th>Nombre y Apellido</th><th>Cédula</th><th>Anfitrión</th><th>E/P</th><th>E/V</th><th>H/E</th><th>H/S</th><th>Recogido</th><th>Acción</th></tr></thead>
-          <tbody id="visitorsTableBody">${allRowsHtml || '<tr><td colspan="10" style="text-align:center">No hay visitantes registrados</td></tr>'}</tbody>
+          <tbody id="visitorsTableBody">${allRowsHtml || '<td><td colspan="10" style="text-align:center">No hay visitantes registrados</td></tr>'}</tbody>
         </table>
         </div>
         <div class="companies-sidebar"><h3><i class="fas fa-building"></i> Compañías en la torre</h3>${towerCompanies.map((c) => `<div class="company-item"><div class="company-logo">${c.logo ? `<img src="${c.logo}" alt="${c.name} logo" style="width:100%;height:100%;object-fit:contain;">` : '<i class="fas fa-building"></i>'}</div><div class="company-name">${c.name}</div></div>`).join("")}</div>
@@ -644,7 +633,7 @@ const renderVisitorStatus = async () => {
   }
 };
 
-// ==================== REPORTE DIARIO ====================
+// ==================== REPORTE DIARIO (CON MODAL BONITO) ====================
 const renderDailyReport = async () => {
   let reportData = { report: {}, lastUpdated: Date.now() };
   try {
@@ -664,7 +653,6 @@ const renderDailyReport = async () => {
   if (!rows)
     rows = `<tr><td colspan="2" style="padding:0.75rem; text-align:center">No hay visitantes registrados por este operador</td></tr>`;
 
-  // Obtener nombre del operador y fecha/hora actual
   const operatorName = currentUser ? currentUser.name : "Desconocido";
   const now = new Date();
   const formattedDate =
@@ -676,10 +664,10 @@ const renderDailyReport = async () => {
         <h2><i class="fas fa-chart-bar"></i> REPORTE DIARIO DE INGRESO DE PERSONAL VISITANTE DE LA TORRE IBM</h2>
         <div class="report-actions">
           <button class="btn-print" id="printReportBtn"><i class="fas fa-print"></i> Descargar PDF / Imprimir</button>
+          <button class="btn-danger" id="closeGuardBtn" style="background: #da1e28; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 2rem; font-weight: 600; cursor: pointer; margin-left: 0.5rem;"><i class="fas fa-door-closed"></i> Cerrar Guardia</button>
           <button class="btn-back" id="backFromReportBtn"><i class="fas fa-arrow-left"></i> Volver al panel</button>
         </div>
       </div>
-      <!-- Nueva línea: información del operador y fecha -->
       <div class="report-meta" style="margin-bottom: 1rem; padding: 0.5rem; background: var(--bg-gray); border-radius: 0.5rem; display: flex; justify-content: space-between; flex-wrap: wrap;">
         <span><strong>Operador:</strong> ${escapeHtml(operatorName)}</span>
         <span><strong>Fecha y hora de generación:</strong> ${escapeHtml(formattedDate)}</span>
@@ -695,7 +683,6 @@ const renderDailyReport = async () => {
   `;
   document.getElementById("mainContent").innerHTML = html;
 
-  // Función auxiliar para escapar caracteres HTML (seguridad)
   function escapeHtml(str) {
     if (!str) return "";
     return str.replace(/[&<>]/g, function (m) {
@@ -707,15 +694,60 @@ const renderDailyReport = async () => {
   }
 
   const printBtn = document.getElementById("printReportBtn");
+  const closeGuardBtn = document.getElementById("closeGuardBtn");
   const backBtn = document.getElementById("backFromReportBtn");
 
   if (printBtn) {
     printBtn.addEventListener("click", async () => {
       window.print();
-      setTimeout(async () => {
+      showToast("Reporte enviado a impresión/PDF", "success");
+    });
+  }
+
+  if (closeGuardBtn) {
+    closeGuardBtn.addEventListener("click", async () => {
+      const modal = document.getElementById("modalContainer");
+      if (!modal) return;
+
+      modal.innerHTML = `
+        <div class="modal-delete-card" style="background: var(--card-bg); border-radius: 1rem; box-shadow: var(--shadow-md); padding: 1.5rem; max-width: 400px; width: 90%; text-align: center;">
+          <div style="font-size: 2.5rem; color: var(--danger); margin-bottom: 0.5rem;">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <h3 style="margin: 0 0 1rem; color: var(--text-dark); font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;">Cerrar Guardia</h3>
+          <p style="margin: 0 0 1.5rem; color: var(--text-muted); font-size: 0.95rem;">¿Está seguro de cerrar la guardia? Esto archivará todos los registros actuales y ya no aparecerán en el reporte diario.</p>
+          <div style="display: flex; gap: 1rem; justify-content: center;">
+            <button class="btn-cancel" id="cancelGuardBtn">Cancelar</button>
+            <button class="btn-delete-modal" id="confirmGuardBtn">Cerrar Guardia</button>
+          </div>
+        </div>
+      `;
+      modal.classList.add("active");
+
+      const cancelBtn = document.getElementById("cancelGuardBtn");
+      const confirmBtn = document.getElementById("confirmGuardBtn");
+
+      const closeModal = () => {
+        modal.classList.remove("active");
+        modal.innerHTML = "";
+      };
+
+      cancelBtn.addEventListener("click", () => {
+        closeModal();
+        showToast("Acción cancelada", "success");
+      });
+
+      confirmBtn.addEventListener("click", async () => {
+        closeModal();
         await archiveUserVisits();
         changeView("main", renderMainView, -1);
-      }, 1000);
+      });
+
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
     });
   }
 
